@@ -1,31 +1,37 @@
-name: Build and Push Docker Image
+name: CI/CD Pipeline for Binary Tree Performance with NGINX
 
 on:
   push:
     branches:
-      - main   # sau master, în funcție de cum se numește ramura principală
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
     - name: Log in to DockerHub
       uses: docker/login-action@v2
       with:
-        username: "caracook1e"  # Înlocuiește cu username-ul tău DockerHub
-        password: "PAROLAdocker1"  # Înlocuiește cu parola ta DockerHub (sau token-ul de acces)
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build Docker image
-      run: |
-        docker build -t caracook1e/proiect_map_18:latest .
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: caracook1e/binary-tree-performance-nginx:latest
 
-    - name: Push Docker image
+    - name: Deploy to Local Server (Optional)
       run: |
-        docker push caracook1e/proiect_map_18:latest
+        echo "Deploy steps here if necessary"

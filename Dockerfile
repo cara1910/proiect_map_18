@@ -1,8 +1,13 @@
+# Folosim imaginea oficială NGINX
 FROM nginx:latest
 
-# Pasul 2: Copiază fișierele aplicației în containerul NGINX
-COPY ./html /usr/share/nginx/html
-COPY ./nginx.conf /etc/nginx/nginx.conf
+# Copiem fișierele aplicației în directorul specific NGINX
+COPY index.html /usr/share/nginx/html/
+COPY style.css /usr/share/nginx/html/
+COPY script.js /usr/share/nginx/html/
 
-# Pasul 3: Expune portul 80 (pentru acces web)
+# Copiem fișierul de configurare NGINX
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expunem portul 80
 EXPOSE 80
